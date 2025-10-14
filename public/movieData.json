@@ -1,0 +1,170 @@
+{
+  "movies": [
+    {
+      "id": 1,
+      "title": "The Shawshank Redemption",
+      "releaseDate": "1994-09-23",
+      "genre": "Drama",
+      "director": "Frank Darabont",
+      "avgRating": 4.8,
+      "posterUrl": "https://images.unsplash.com/photo-1489599558687-b332130f6b73?w=300&h=450&fit=crop&crop=center",
+      "description": "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.",
+      "duration": 142
+    },
+    {
+      "id": 2,
+      "title": "The Godfather",
+      "releaseDate": "1972-03-24",
+      "genre": "Crime",
+      "director": "Francis Ford Coppola",
+      "avgRating": 4.7,
+      "posterUrl": "https://images.unsplash.com/photo-1518676590629-3dcbd9c5a5c9?w=300&h=450&fit=crop&crop=center",
+      "description": "The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.",
+      "duration": 175
+    },
+    {
+      "id": 3,
+      "title": "Pulp Fiction",
+      "releaseDate": "1994-10-14",
+      "genre": "Crime",
+      "director": "Quentin Tarantino",
+      "avgRating": 4.6,
+      "posterUrl": "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=300&h=450&fit=crop&crop=center",
+      "description": "The lives of two mob hitmen, a boxer, a gangster and his wife intertwine in four tales of violence and redemption.",
+      "duration": 154
+    },
+    {
+      "id": 4,
+      "title": "The Dark Knight",
+      "releaseDate": "2008-07-18",
+      "genre": "Action",
+      "director": "Christopher Nolan",
+      "avgRating": 4.9,
+      "posterUrl": "https://images.unsplash.com/photo-1518639192441-8fce0c83b5d6?w=300&h=450&fit=crop&crop=center",
+      "description": "When the menace known as the Joker wreaks havoc and chaos on Gotham, Batman must accept one of the greatest tests.",
+      "duration": 152
+    },
+    {
+      "id": 5,
+      "title": "Forrest Gump",
+      "releaseDate": "1994-07-06",
+      "genre": "Drama",
+      "director": "Robert Zemeckis",
+      "avgRating": 4.4,
+      "posterUrl": "https://images.unsplash.com/photo-1489599558687-b332130f6b73?w=300&h=450&fit=crop&crop=center",
+      "description": "The presidencies of Kennedy and Johnson through the eyes of an Alabama man with an IQ of 75.",
+      "duration": 142
+    },
+    {
+      "id": 6,
+      "title": "Inception",
+      "releaseDate": "2010-07-16",
+      "genre": "Sci-Fi",
+      "director": "Christopher Nolan",
+      "avgRating": 4.5,
+      "posterUrl": "https://images.unsplash.com/photo-1518676590629-3dcbd9c5a5c9?w=300&h=450&fit=crop&crop=center",
+      "description": "A thief who steals corporate secrets through dream-sharing technology is given the task of planting an idea.",
+      "duration": 148
+    },
+    {
+      "id": 7,
+      "title": "The Matrix",
+      "releaseDate": "1999-03-31",
+      "genre": "Sci-Fi",
+      "director": "The Wachowskis",
+      "avgRating": 4.3,
+      "posterUrl": "https://images.unsplash.com/photo-1518639192441-8fce0c83b5d6?w=300&h=450&fit=crop&crop=center",
+      "description": "A computer hacker learns from mysterious rebels about the true nature of his reality and his role in the war against its controllers.",
+      "duration": 136
+    },
+    {
+      "id": 8,
+      "title": "Goodfellas",
+      "releaseDate": "1990-09-19",
+      "genre": "Crime",
+      "director": "Martin Scorsese",
+      "avgRating": 4.6,
+      "posterUrl": "https://images.unsplash.com/photo-1440404653325-ab127d49abc1?w=300&h=450&fit=crop&crop=center",
+      "description": "The story of Henry Hill and his life in the mob, covering his relationship with his wife Karen Hill and his mob partners.",
+      "duration": 146
+    },
+    {
+      "id": 9,
+      "title": "Interstellar",
+      "releaseDate": "2014-11-07",
+      "genre": "Sci-Fi",
+      "director": "Christopher Nolan",
+      "avgRating": 4.4,
+      "posterUrl": "https://images.unsplash.com/photo-1518676590629-3dcbd9c5a5c9?w=300&h=450&fit=crop&crop=center",
+      "description": "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
+      "duration": 169
+    },
+    {
+      "id": 10,
+      "title": "The Lord of the Rings: The Fellowship of the Ring",
+      "releaseDate": "2001-12-19",
+      "genre": "Fantasy",
+      "director": "Peter Jackson",
+      "avgRating": 4.8,
+      "posterUrl": "https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=300&h=450&fit=crop&crop=center",
+      "description": "A meek Hobbit from the Shire and eight companions set out on a journey to destroy the powerful One Ring.",
+      "duration": 178
+    }
+  ],
+  "reviews": [
+    {
+      "id": 101,
+      "username": "moviebuff23",
+      "rating": 5,
+      "comment": "An absolute masterpiece! The storytelling is phenomenal and the character development is second to none.",
+      "movieId": 1,
+      "userId": 1,
+      "createdAt": "2024-01-15"
+    },
+    {
+      "id": 102,
+      "username": "cinephile_jane",
+      "rating": 4,
+      "comment": "Great cinematography and powerful performances. A must-watch classic.",
+      "movieId": 1,
+      "userId": 2,
+      "createdAt": "2024-01-20"
+    },
+    {
+      "id": 103,
+      "username": "film_critic",
+      "rating": 5,
+      "comment": "Coppola's direction is flawless. One of the greatest films ever made.",
+      "movieId": 2,
+      "userId": 3,
+      "createdAt": "2024-02-01"
+    },
+    {
+      "id": 104,
+      "username": "action_lover",
+      "rating": 5,
+      "comment": "Heath Ledger's Joker is iconic. This movie redefined superhero films.",
+      "movieId": 4,
+      "userId": 4,
+      "createdAt": "2024-02-10"
+    },
+    {
+      "id": 105,
+      "username": "scifi_fan",
+      "rating": 5,
+      "comment": "Mind-bending plot and incredible visual effects. Nolan at his best!",
+      "movieId": 6,
+      "userId": 5,
+      "createdAt": "2024-02-15"
+    },
+    {
+      "id": 106,
+      "username": "fantasy_geek",
+      "rating": 5,
+      "comment": "Epic fantasy adventure that started it all. Perfect adaptation of Tolkien's work.",
+      "movieId": 10,
+      "userId": 6,
+      "createdAt": "2024-03-01"
+    }
+  ]
+}
