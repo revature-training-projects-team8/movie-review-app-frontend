@@ -1,10 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { Star, Calendar, Clock, Film, User, ArrowLeft, Play, Info } from 'lucide-react';
-import ReviewForm from '../components/ReviewForm';
-import ReviewList from '../components/ReviewList';
-import { useAuth } from '../context/AuthContext';
-import { getAllMoviesFromDB, getAllMovies, REAL_MOVIES_DATA, MOCK_REVIEWS } from '../utils/constants';
+import React, { useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
+import {
+  Star,
+  Calendar,
+  Clock,
+  Film,
+  User,
+  ArrowLeft,
+  Play,
+  Info,
+} from "lucide-react";
+import ReviewForm from "../components/ReviewForm";
+import ReviewList from "../components/ReviewList";
+import { useAuth } from "../context/AuthContext";
+// No more constants needed - using database directly
 
 const MovieDetailPage = () => {
   const { id } = useParams();
@@ -18,69 +27,39 @@ const MovieDetailPage = () => {
   const fetchMovieData = async () => {
     setLoading(true);
     setError(null);
-    
+
     try {
-      // Fetch movie details
+      // Fetch movie details from database
       const movieResponse = await api.get(`/movies/${id}`);
+
       setMovie(movieResponse.data);
 
-      // Fetch reviews for this movie
+      // Fetch reviews for this movie from database
+
       const reviewsResponse = await api.get(`/reviews/movie/${id}`);
       const movieReviews = reviewsResponse.data;
-      
+
       // Separate user's review from others
       const currentUserReview = movieReviews.find(
-        review => user && review.userId === user.id
+        (review) => user && review.userId === user.id
       );
       const otherReviews = movieReviews.filter(
-        review => !user || review.userId !== user.id
+        (review) => !user || review.userId !== user.id
       );
-      
+
       setUserReview(currentUserReview || null);
       setReviews(otherReviews);
-      
     } catch (error) {
-      console.error('Error fetching movie data:', error);
-      
-      // Fallback to JSON data
-      try {
-        const jsonData = await loadMoviesFromJSON();
-        const jsonMovie = jsonData.movies.find(m => m.id === parseInt(id));
-        const jsonReviews = jsonData.reviews.filter(r => r.movieId === parseInt(id));
-        
-        if (jsonMovie) {
-          setMovie(jsonMovie);
-          const currentUserReview = jsonReviews.find(
-            review => user && review.username === user.username
-          );
-          const otherReviews = jsonReviews.filter(
-            review => !user || review.username !== user.username
-          );
-          setUserReview(currentUserReview || null);
-          setReviews(otherReviews);
-        } else {
-          throw new Error('Movie not found in JSON data');
-        }
-      } catch (jsonError) {
-        console.error('Error loading from JSON:', jsonError);
-        
-        // Final fallback to hardcoded mock data
-        const mockMovie = REAL_MOVIES_DATA.find(m => m.id === parseInt(id));
-        const mockReviews = MOCK_REVIEWS.filter(r => r.movieId === parseInt(id));
-        
-        if (mockMovie) {
-          setMovie(mockMovie);
-          const currentUserReview = mockReviews.find(
-            review => user && review.username === user.username
-          );
-          const otherReviews = mockReviews.filter(
-            review => !user || review.username !== user.username
-          );
-          setUserReview(currentUserReview || null);
-          setReviews(otherReviews);
-        } else {
-          setError('Movie not found');
-        }
+      console.error("❌ Error fetching movie data:", error);
+      if (error.response?.status === 403) {
+        console.error("🚫 Authentication required - please log in");
+        setError(
+          "Authentication required. Please log in to view movie details."
+        );
+      } else if (error.response?.status === 404) {
+        setError("Movie not found");
+      } else {
+        setError("Failed to load movie data. Please try again later.");
       }
     } finally {
       setLoading(false);
@@ -108,7 +87,7 @@ const MovieDetailPage = () => {
       <Star
         key={index}
         className={`w-6 h-6 ${
-          index < rating ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300'
+          index < rating ? "text-yellow-500 fill-yellow-500" : "text-gray-300"
         }`}
       />
     ));
@@ -130,9 +109,11 @@ const MovieDetailPage = () => {
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center">
           <Film className="w-24 h-24 text-gray-500 mx-auto mb-4" />
-          <h2 className="text-2xl font-bold text-white mb-2">Movie Not Found</h2>
+          <h2 className="text-2xl font-bold text-white mb-2">
+            Movie Not Found
+          </h2>
           <p className="text-gray-300 mb-6">
-            {error || 'The movie you\'re looking for doesn\'t exist.'}
+            {error || "The movie you're looking for doesn't exist."}
           </p>
           <Link
             to="/"
@@ -173,27 +154,27 @@ const MovieDetailPage = () => {
                 className="w-full h-96 md:h-full object-cover"
               />
             </div>
-            
+
             {/* Movie Information */}
             <div className="md:w-2/3 lg:w-3/4 p-8">
               <div className="mb-6">
                 <h1 className="text-4xl font-extrabold text-gray-900 mb-2">
                   {movie.title}
                 </h1>
-                
+
                 <div className="flex flex-wrap items-center gap-4 text-gray-600 mb-4">
                   <div className="flex items-center">
                     <Calendar className="w-5 h-5 mr-2" />
                     <span>{new Date(movie.releaseDate).toDateString()}</span>
                   </div>
-                  
+
                   {movie.duration && (
                     <div className="flex items-center">
                       <Clock className="w-5 h-5 mr-2" />
                       <span>{movie.duration} minutes</span>
                     </div>
                   )}
-                  
+
                   <span className="inline-block bg-primary-100 text-primary-800 px-3 py-1 rounded-full text-sm font-semibold">
                     {movie.genre}
                   </span>
@@ -201,7 +182,8 @@ const MovieDetailPage = () => {
 
                 {movie.director && (
                   <p className="text-lg text-gray-700 mb-4">
-                    <span className="font-semibold">Directed by:</span> {movie.director}
+                    <span className="font-semibold">Directed by:</span>{" "}
+                    {movie.director}
                   </p>
                 )}
 
@@ -211,7 +193,7 @@ const MovieDetailPage = () => {
                     {renderStars(Math.round(movie.avgRating || 0))}
                   </div>
                   <div className="text-2xl font-bold text-gray-800">
-                    {movie.avgRating?.toFixed(1) || 'No ratings'}
+                    {movie.avgRating?.toFixed(1) || "No ratings"}
                   </div>
                   <div className="ml-2 text-gray-500">
                     ({reviews.length + (userReview ? 1 : 0)} reviews)
@@ -248,10 +230,7 @@ const MovieDetailPage = () => {
           {/* Reviews List */}
           <div className="lg:col-span-2">
             <div className="bg-gray-900 rounded-xl shadow-2xl p-6 border border-gray-700">
-              <ReviewList 
-                reviews={reviews} 
-                currentUserId={user?.id}
-              />
+              <ReviewList reviews={reviews} currentUserId={user?.id} />
             </div>
           </div>
         </div>
