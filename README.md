@@ -1,367 +1,187 @@
-# 🎬 Movie Review App - Frontend
+# 🎬 Movie Review App: System Design Documentation
 
-A modern, full-stack movie review application built with React, Spring Boot, and MySQL. Browse movies, write reviews, rate films, and manage your personal movie collection.
+**Project Title:** Movie Review App
 
-![React](https://img.shields.io/badge/React-18.3.1-blue?logo=react)
-![Vite](https://img.shields.io/badge/Vite-6.0-646CFF?logo=vite)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-Backend-green?logo=spring)
-![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?logo=mysql)
+A full-stack web application allowing users to browse movies, view details, and submit reviews. This project serves as a training exercise focusing on modern web development practices.
 
----
-
-## ✨ Features
-
-- 🎥 **Browse Movies** - View 12+ curated movies with details
-- 🔍 **Search & Filter** - Find movies by title, genre, or director
-- ⭐ **Rate & Review** - Write reviews and rate movies 1-5 stars
-- 👤 **User Profiles** - Track your reviews and favorite genres
-- 🔐 **Authentication** - Secure login/register with BCrypt encryption
-- 👨‍💼 **Admin Panel** - Initialize database with movie data
-- 📱 **Responsive Design** - Works on mobile, tablet, and desktop
-- 🚀 **Real-time Updates** - Seamless backend integration
+| Detail | Value |
+| :--- | :--- |
+| **Project Type** | Group Project |
+| **Training Duration** | 3 Weeks |
+| **Core Tools/Technologies** | Java, SQL, **GIT**, **HTML**, **Typescript**, **React**, **Spring**, **Spring Boot**, **Spring MVC**, **Spring Data** |
+| **Outcome** | Associates should be able to develop a full-stack application using Spring REST and React. |
 
 ---
 
-## 🚀 Quick Start
+## ⚙️ 2. Detailed Component Design
 
-### Prerequisites
+The application follows a standard **three-tier architecture** (Client, Application, and Data).
 
-- **Node.js** 16+ and npm
-- **Java** 17+
-- **MySQL** 8.0+
-- **Maven** 3.6+
+### 2.1. Client-Tier (Frontend)
 
-### 1. Clone and Install
+| Attribute | Description |
+| :--- | :--- |
+| **Technology Stack** | **React** (TypeScript, HTML, CSS/SCSS, JSX/TSX) |
+| **Purpose** | Provides the **User Interface (UI)** for browsing movies, viewing details, and submitting reviews. |
+| **Routing** | **React Router DOM** for client-side navigation. |
+| **Styling** | CSS Modules, Styled Components, or a CSS framework (e.g., Bootstrap, Tailwind CSS). |
 
-```bash
-# Clone the repository
-git clone https://github.com/revature-training-projects-team8/movie-review-app-frontend.git
-cd movie-review-app-frontend
+#### **Key Components**
 
-# Install dependencies
-npm install
-```
-
-### 2. Setup Database
-
-```sql
--- Connect to MySQL
-mysql -u root -p
-
--- Create database and tables
-CREATE DATABASE movies;
-USE movies;
-
--- Run the complete setup script
-source d:/Projects/Revature/movie-review-app-frontend/sql/complete_database_setup.sql
-```
-
-### 3. Start Backend
-
-```bash
-# Clone backend repository
-git clone https://github.com/revature-training-projects-team8/movie-review-app-backend.git
-cd movie-review-app-backend
-
-# Add SecurityConfig.java (see QUICK_INTEGRATION.md)
-# Copy from: ../movie-review-app-frontend/backend-config/SecurityConfig.java
-# To: src/main/java/com/moviereview/config/SecurityConfig.java
-
-# Start Spring Boot
-mvn spring-boot:run
-```
-
-**Verify backend:** http://localhost:8080/movies (should return `[]`)
-
-### 4. Start Frontend
-
-```bash
-# Back to frontend directory
-cd movie-review-app-frontend
-
-# Start development server
-npm run dev
-```
-
-**Open:** http://localhost:3001
-
-### 5. Initialize Movies
-
-1. Login with admin credentials:
-
-   - **Username:** `admin`
-   - **Password:** `admin123`
-
-2. Go to Admin Panel: http://localhost:3001/admin
-
-3. Click "Save All Movies to DB"
-
-4. Wait for success message
-
-5. Return to homepage to see all 12 movies!
+* **User Interface (UI) Components:** Reusable components like `Header.tsx`, `MovieCard.tsx`, `ReviewForm.tsx`, and buttons.
+* **Pages/Views:** Top-level components for application views:
+    * `HomePage.tsx`: Displays a list of popular or recently added movies.
+    * `MovieDetailPage.tsx`: Shows detailed information and a list of existing reviews.
+    * `LoginPage.tsx` / `RegisterPage.tsx`: User authentication.
+    * `ProfilePage.tsx` (Optional): User's submitted reviews.
+* **State Management:**
+    * **React Hooks** (`useState`, `useEffect`, `useContext`) for local state.
+    * Potentially a global state management library (e.g., **Redux Toolkit**, Zustand, or **React Context API**) for application-wide data.
+* **API Service:** A dedicated module (`apiService.ts`) to handle all **HTTP requests** to the backend API using `fetch` or Axios.
 
 ---
 
-## 📚 Documentation
+### 2.2. Application-Tier (Backend)
 
-| Document                                                     | Description                                 |
-| ------------------------------------------------------------ | ------------------------------------------- |
-| [QUICK_INTEGRATION.md](QUICK_INTEGRATION.md)                 | **START HERE** - 3-step integration guide   |
-| [BACKEND_INTEGRATION_GUIDE.md](BACKEND_INTEGRATION_GUIDE.md) | Complete backend setup with troubleshooting |
-| [ARCHITECTURE.md](ARCHITECTURE.md)                           | Full system architecture diagram            |
-| [DATABASE_SETUP.md](DATABASE_SETUP.md)                       | Database schema and SQL scripts             |
-| [CORS_FIX.md](CORS_FIX.md)                                   | Fix CORS errors (if you see them)           |
-| [USER_STORIES.md](USER_STORIES.md)                           | Product requirements and features           |
+| Attribute | Description |
+| :--- | :--- |
+| **Technology Stack** | **Java**, **Spring Boot**, **Spring MVC**, **Spring Data JPA** |
+| **Purpose** | Handles **business logic**, data persistence, and exposes **RESTful APIs** for the frontend. |
 
----
+#### **Key Components**
 
-## 🎯 Default Credentials
-
-### Admin Account
-
-- **Username:** `admin`
-- **Password:** `admin123`
-- **Email:** admin@movies.com
-
-### Test Users
-
-- **john_doe** / password123
-- **jane_smith** / password123
-- **movie_buff** / password123
-- **cinema_lover** / password123
+* **REST Controllers (`@RestController`):** Define API endpoints for resources (movies, reviews, users). Examples: `MovieController.java`, `ReviewController.java`.
+* **Service Layer (`@Service`):** Contains core business logic and orchestrates operations involving multiple repositories. Examples: `MovieService.java`, `ReviewService.java`.
+* **Repository Layer (`@Repository`):** Interfaces extending `JpaRepository` to abstract and manage database interactions (CRUD operations). Examples: `MovieRepository.java`.
+* **Models/Entities:** POJOs annotated with JPA (`@Entity`, `@Table`, `@Id`) to represent database tables. Examples: `Movie.java`, `Review.java`, `User.java`.
+* **DTOs (Data Transfer Objects):** Objects used for transferring data between client and server, separating presentation from JPA entities.
+* **Security (Spring Security):** Authentication (e.g., JWT) and Authorization (role-based access control).
+* **Configuration:** `application.properties` or `application.yml` for database connection, port, etc.
 
 ---
 
-## 🛠️ Tech Stack
+### 2.3. Data-Tier
 
-### Frontend
+| Attribute | Description |
+| :--- | :--- |
+| **Technology Stack** | **SQL** (e.g., MySQL for production, H2 for development) |
+| **Purpose** | Stores all application data in a **relational database**. |
 
-- **React** 18.3.1 - UI framework
-- **React Router** 6.28.0 - Routing
-- **Axios** - HTTP client
-- **Lucide React** - Icon library
-- **Tailwind CSS** - Styling
-- **Vite** - Build tool
+#### **Schema Design**
 
-### Backend
+| Table | Key Fields | Relationships | Notes |
+| :--- | :--- | :--- | :--- |
+| **users** | `id` (PK), `username` (UNIQUE), `email` (UNIQUE), `password` (HASHED), `role` | | `role` (e.g., 'USER', 'ADMIN') |
+| **movies** | `id` (PK), `title`, `description`, `release_date`, `genre`, `director`, `poster_url`, `average_rating` | | |
+| **reviews** | `id` (PK), `rating`, `comment`, `created_at` | `movie_id` (FK to movies), `user_id` (FK to users) | Records user-submitted ratings and comments. |
 
-- **Spring Boot** 3.x - REST API framework
-- **Spring Security** - Authentication & CORS
-- **Spring Data JPA** - ORM
-- **BCrypt** - Password hashing
-- **MySQL** - Database
-- **Maven** - Build tool
+#### **Data Management**
 
-### Database Schema
-
-```sql
-users (id, username, email, password, created_at)
-movies (id, title, director, genre, description, poster_url, duration, release_date, avg_rating)
-reviews (id, movie_id, user_id, rating, comment, created_at)
-```
+* **Migrations:** Use tools like Flyway or Liquibase for database schema management, or simple `schema.sql` / `data.sql`.
+* **Security:** Store user passwords securely using strong hashing algorithms (e.g., **BCrypt**).
 
 ---
 
-## 📂 Project Structure
+## 🌐 3. API Endpoints (RESTful Example)
 
-```
-movie-review-app-frontend/
-├── src/
-│   ├── components/        # Reusable components
-│   │   ├── Header.jsx
-│   │   ├── MovieCard.jsx
-│   │   ├── ReviewForm.jsx
-│   │   └── ReviewList.jsx
-│   ├── pages/            # Page components
-│   │   ├── HomePage.jsx
-│   │   ├── LoginPage.jsx
-│   │   ├── RegisterPage.jsx
-│   │   ├── ProfilePage.jsx
-│   │   ├── MovieDetailPage.jsx
-│   │   └── AdminPanel.jsx
-│   ├── context/          # React Context
-│   │   └── AuthContext.jsx
-│   ├── utils/            # Utilities
-│   │   └── constants.js  # API config & movie data
-│   ├── App.jsx
-│   └── main.jsx
-├── backend-config/       # Backend configuration files
-│   └── SecurityConfig.java
-├── sql/                  # Database scripts
-│   └── complete_database_setup.sql
-├── public/
-├── docs/                 # Documentation
-└── package.json
-```
+**Base URL:** `/api/v1`
 
----
+### **Movies**
 
-## 🔗 API Endpoints
+| Method | Endpoint | Description | Access |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/movies` | Get a list of all movies. | Public |
+| `GET` | `/movies/{id}` | Get detailed information for a movie by ID. | Public |
+| `POST` | `/movies` | Add a new movie. | Admin Only |
+| `PUT` | `/movies/{id}` | Update an existing movie. | Admin Only |
+| `DELETE` | `/movies/{id}` | Delete a movie. | Admin Only |
 
-### Authentication
+### **Reviews**
 
-- `POST /auth/login` - Login with username/password
-- `POST /auth/register` - Register new user
+| Method | Endpoint | Description | Access |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/reviews/movie/{movieId}` | Get all reviews for a specific movie. | Public |
+| `POST` | `/reviews` | Submit a new review for a movie. | Authenticated User |
+| `PUT` | `/reviews/{id}` | Update an existing review. | Authenticated User (Owner Only) |
+| `DELETE` | `/reviews/{id}` | Delete a review. | Authenticated User (Owner or Admin) |
 
-### Movies
+### **Users / Authentication**
 
-- `GET /movies` - Get all movies
-- `GET /movies/:id` - Get movie by ID
-- `POST /movies` - Create movie (admin only)
-- `PUT /movies/:id` - Update movie (admin only)
-- `DELETE /movies/:id` - Delete movie (admin only)
-
-### Reviews
-
-- `GET /reviews/movie/:id` - Get reviews for a movie
-- `POST /reviews` - Create review (authenticated)
-- `PUT /reviews/:id` - Update own review
-- `DELETE /reviews/:id` - Delete own review
+| Method | Endpoint | Description | Access |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/auth/register` | Register a new user. | Public |
+| `POST` | `/auth/login` | Authenticate user and receive a JWT token. | Public |
+| `GET` | `/users/{id}` | Get user details. | Authenticated (Optional: Admin Only) |
 
 ---
 
-## 🧪 Development
+## 🤝 4. Group Collaboration (GIT Workflow)
 
-### Available Scripts
-
-```bash
-# Start development server (port 3001)
-npm run dev
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
-
-# Run linter
-npm run lint
-```
-
-### Environment Variables
-
-Create `.env` file:
-
-```env
-VITE_API_URL=http://localhost:8080
-```
+* **Repository:** A single central Git repository.
+* **Branching Strategy:** Feature Branch Workflow (Simplified GitHub Flow).
+    * `main` (or `master`): Production-ready code.
+    * `develop`: Integration branch for ongoing development.
+    * `feature/your-feature-name`: Branches for individual tasks (e.g., `feature/login-form`, `feature/movie-api`).
+* **Pull Requests (PRs):** **Mandatory** for code review before merging into `develop`.
+* **Issue Tracking:** Use GitHub Issues, Jira, or similar to track tasks, bugs, and enhancements.
 
 ---
 
-## 🐛 Troubleshooting
+## 🗓️ 5. Development Workflow (3 Weeks Training Context)
 
-### CORS Error
+### **Week 1: Backend Foundation & Database**
 
-**Problem:** "Access to XMLHttpRequest has been blocked by CORS policy"
+| Focus | Key Activities |
+| :--- | :--- |
+| **Project Setup** | Initialize Spring Boot project and Git repository. |
+| **Database & ORM** | Define `Movie`, `User`, `Review` JPA Entities and Repositories. Set up H2/MySQL. |
+| **API Development** | Implement basic `MovieController` with **GET** endpoints (`/movies`, `/movies/{id}`). |
+| **CRUD & Testing** | Add **POST/PUT/DELETE** for movies. Test APIs using Postman/Insomnia. |
+| **User Setup** | Implement user registration logic (`UserController`, `UserService`). Set up basic **Spring Security** placeholder. |
 
-**Solution:**
+### **Week 2: Frontend & Integration**
 
-1. Verify `SecurityConfig.java` is in backend
-2. Restart Spring Boot backend
-3. See [CORS_FIX.md](CORS_FIX.md) for details
+| Focus | Key Activities |
+| :--- | :--- |
+| **React Setup** | Initialize React project. Design basic UI components (`Header`, `MovieCard`). |
+| **Integration** | Implement `HomePage` to fetch and display movies from the backend (`GET /movies`). |
+| **Routing & Details** | Implement `MovieDetailPage` (display movie details, list reviews). Set up **React Router**. |
+| **Auth Integration** | Implement **Login** and **Registration** forms, connecting to backend `/auth` endpoints. Handle JWT token storage. |
 
-### Login Fails
+### **Week 3: Reviews, Enhancements & Deployment**
 
-**Problem:** "Invalid credentials" or login doesn't work
-
-**Solution:**
-
-1. Check MySQL is running
-2. Verify admin user exists: `SELECT * FROM users WHERE username='admin';`
-3. Password must be BCrypt hash starting with `$2a$10$`
-
-### Movies Not Loading
-
-**Problem:** Homepage shows "No movies found"
-
-**Solution:**
-
-1. Check backend is running: `curl http://localhost:8080/movies`
-2. Go to http://localhost:3001/admin
-3. Click "Save All Movies to DB"
-
-### Port Already in Use
-
-**Problem:** "Port 3001/8080 is already in use"
-
-**Solution:**
-
-```powershell
-# Kill process on port 3001
-netstat -ano | findstr :3001
-taskkill /PID <PID> /F
-
-# Kill process on port 8080
-netstat -ano | findstr :8080
-taskkill /PID <PID> /F
-```
+| Focus | Key Activities |
+| :--- | :--- |
+| **Core Feature** | Implement the `ReviewForm` component. Connect to backend `POST /reviews`. Implement review **update/delete**. |
+| **Refinement** | Refine UI/UX, add responsiveness, implement **error handling** and loading states. |
+| **Security Audit** | Enhance backend security (e.g., proper JWT implementation, role-based authorization). Add **validation** to forms. |
+| **Finalization** | Final testing (unit, integration). Complete documentation. |
+| **Deployment (Optional)** | Basic deployment to a cloud platform (e.g., Heroku, AWS). |
 
 ---
 
-## 🎨 Screenshots
+## 📝 Movie Review App: User Stories
 
-### Homepage
+### A. General User Stories (Public Access)
 
-Browse and search through movie collection
+| Goal | User Story |
+| :--- | :--- |
+| **Browse Movies** | As a **movie enthusiast**, I want to **view a list of all available movies** with basic details (title, poster), so that I can discover and scan new films. |
+| **View Details** | As a **movie enthusiast**, I want to **see comprehensive information** (description, director, genre, average rating) for a specific movie, so that I can learn more about it. |
+| **Read Reviews** | As a **movie enthusiast**, I want to **read existing reviews** for a movie, so that I can understand what others think. |
+| **Search** | As a **movie enthusiast**, I want to **search for movies by title or genre**, so that I can find specific films easily. |
 
-### Movie Details
+### B. Authenticated User Stories (Requires Login)
 
-View comprehensive movie information and reviews
+| Goal | User Story |
+| :--- | :--- |
+| **Authentication** | As a **user**, I want to **register** and **log in** with my credentials, so that I can access personalized and interactive features. |
+| **Submit Reviews** | As a **logged-in user**, I want to **submit a star rating and a text comment** for a movie, so that I can express my opinion. |
+| **Manage Reviews** | As a **logged-in user**, I want to **edit or delete my own previously submitted review**, so that I can correct or remove my thoughts. |
 
-### Login Page
+### C. Administrator User Stories (Requires Admin Role)
 
-Secure authentication with demo credentials
-
-### Admin Panel
-
-Initialize database with movie data
-
----
-
-## 📝 License
-
-This project is part of Revature training program.
-
----
-
-## 🤝 Contributing
-
-This is a training project. For issues or improvements:
-
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Open a Pull Request
-
----
-
-## 👥 Team
-
-**Revature Training Projects - Team 8**
-
-- Frontend: React + Vite
-- Backend: Spring Boot
-- Database: MySQL
-
----
-
-## 🔗 Related Repositories
-
-- **Backend:** [movie-review-app-backend](https://github.com/revature-training-projects-team8/movie-review-app-backend)
-- **Frontend:** [movie-review-app-frontend](https://github.com/revature-training-projects-team8/movie-review-app-frontend)
-
----
-
-## 📞 Support
-
-For help with setup:
-
-1. Check documentation files in root directory
-2. Review troubleshooting sections
-3. Verify all prerequisites are installed
-4. Ensure backend and database are running
-
----
-
-**Built with ❤️ using React, Spring Boot, and MySQL**
+| Goal | User Story |
+| :--- | :--- |
+| **Movie Management** | As an **administrator**, I want to **add, edit, and delete any movie** from the database, so that I can manage the film catalog. |
+| **Content Moderation**| As an **administrator**, I want to **delete any user's review**, so that I can moderate inappropriate content. |
