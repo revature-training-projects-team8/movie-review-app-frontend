@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { API_BASE_URL } from "../utils/constants";
+import { API_BASE_URL,API_LOGIN_URL,API_REGISTER_URL } from "../utils/constants";
 
 const AuthContext = createContext();
 
@@ -70,7 +70,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (username, password) => {
     setLoading(true);
     try {
-      const response = await axios.post(`${API_BASE_URL}/auth/login`, {
+      const response = await axios.post(`${API_LOGIN_URL}`, {
         username,
         password,
       });
@@ -158,7 +158,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (username, email, password) => {
     setLoading(true);
     try {
-      await axios.post(`${API_BASE_URL}/auth/register`, {
+      await axios.post(`${API_REGISTER_URL}`, {
         username,
         email,
         password,
