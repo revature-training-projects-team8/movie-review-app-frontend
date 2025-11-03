@@ -601,8 +601,8 @@ jwt.expiration=${JWT_EXPIRATION}
 ```bash
 # Database Connection
 DB_URL=jdbc:mysql://localhost:3306/movies?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-DB_USERNAME=root
-DB_PASSWORD=06130425Ml$
+DB_USERNAME=admin
+DB_PASSWORD=admin123
 
 # Security Configuration
 JWT_SECRET=mySecretKeyForJWTTokenGenerationThatIsAtLeast256BitsLongForHS256AlgorithmSecureRandomString2024
