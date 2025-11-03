@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useContext } from 'react';
 import { UserContext } from '../context.jsx';
 import axios from 'axios';
-import { FaStar } from 'react-icons/fa';
+import { FaStar, FaEdit, FaTrash, FaSave, FaTimes } from 'react-icons/fa';
 // import Toast from "../context.jsx";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -26,8 +26,25 @@ const Movie = ({movies, onReviewAdded, movieUpdate}) => {
   const [reviewsLoading, setReviewsLoading] = useState(true);
   const [reviewsError, setReviewsError] = useState('');
   
+  // Edit review state
+  const [editingReviewId, setEditingReviewId] = useState(null);
+  const [editReviewData, setEditReviewData] = useState({
+    rating: 5,
+    comment: ''
+  });
+  const [isUpdatingReview, setIsUpdatingReview] = useState(false);
+  const [isDeletingReview, setIsDeletingReview] = useState(null);
+  
   // Find the movie with the matching ID
   const movie = movies.find(movie => movie.id.toString() === id);
+
+  // Check if current user has already written a review for this movie
+  const currentUserReview = reviews.find(review => 
+    context?.currentUser && (
+      review.userId === context.currentUser.id || 
+      review.user?.id === context.currentUser.id
+    )
+  );
 
   // Fetch reviews from database
   useEffect(() => {
@@ -38,8 +55,22 @@ const Movie = ({movies, onReviewAdded, movieUpdate}) => {
         setReviewsLoading(true);
         const response = await axios.get(`http://localhost:8080/api/reviews/movie/${id}`);
         // Backend should return reviews with populated user data (username via userId)
-        // Sort reviews by creation date (newest first)
-        const sortedReviews = response.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        // Sort reviews: current user's review first, then by creation date (newest first)
+        const sortedReviews = response.data.sort((a, b) => {
+          const currentUserId = context?.currentUser?.id;
+          
+          // If current user exists, prioritize their review
+          if (currentUserId) {
+            const aIsCurrentUser = a.userId === currentUserId || a.user?.id === currentUserId;
+            const bIsCurrentUser = b.userId === currentUserId || b.user?.id === currentUserId;
+            
+            if (aIsCurrentUser && !bIsCurrentUser) return -1;
+            if (!aIsCurrentUser && bIsCurrentUser) return 1;
+          }
+          
+          // If both or neither are current user's reviews, sort by creation date
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        });
         setReviews(sortedReviews);
         setReviewsError('');
       } catch (error) {
@@ -99,14 +130,30 @@ const Movie = ({movies, onReviewAdded, movieUpdate}) => {
         }
       });
 
-      // Add the new review to the top of the reviews list
+      // Add the new review and re-sort to maintain current user at top
       const newReview = response.data;
-      setReviews(prevReviews => [newReview, ...prevReviews]);
+      setReviews(prevReviews => {
+        const updatedReviews = [newReview, ...prevReviews];
+        // Re-sort to ensure current user's review stays at top
+        return updatedReviews.sort((a, b) => {
+          const currentUserId = context?.currentUser?.id;
+          
+          if (currentUserId) {
+            const aIsCurrentUser = a.userId === currentUserId || a.user?.id === currentUserId;
+            const bIsCurrentUser = b.userId === currentUserId || b.user?.id === currentUserId;
+            
+            if (aIsCurrentUser && !bIsCurrentUser) return -1;
+            if (!aIsCurrentUser && bIsCurrentUser) return 1;
+          }
+          
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+      });
 
       // Reset form and hide it
       setReviewData({ rating: 5, comment: '' });
       setShowReviewForm(false);
-      alert('Review submitted successfully!');
+      toast.success('Review submitted successfully!');
 
       // Notify parent component about the new review
       if (onReviewAdded) {
@@ -130,7 +177,138 @@ const Movie = ({movies, onReviewAdded, movieUpdate}) => {
       alert('Please login to write a review');
       return;
     }
-    setShowReviewForm(!showReviewForm);
+    
+    // Toggle the review form - if it's showing, hide it (cancel), otherwise show it
+    if (showReviewForm) {
+      // Cancel - hide form and reset data
+      setShowReviewForm(false);
+      setReviewData({ rating: 5, comment: '' });
+    } else {
+      // Show the review form
+      setShowReviewForm(true);
+    }
+  };
+
+  // Edit review functions
+  const handleEditReview = (review) => {
+    setEditingReviewId(review.id);
+    setEditReviewData({
+      rating: review.rating,
+      comment: review.comment
+    });
+  };
+
+  const handleCancelEdit = () => {
+    setEditingReviewId(null);
+    setEditReviewData({ rating: 5, comment: '' });
+  };
+
+  const handleUpdateReview = async (reviewId) => {
+    if (!context?.currentUser) {
+      toast.error('Please login to update review');
+      return;
+    }
+
+    setIsUpdatingReview(true);
+    try {
+      const reviewPayload = {
+        rating: parseInt(editReviewData.rating),
+        comment: editReviewData.comment.trim()
+      };
+
+      const response = await axios.put(`http://localhost:8080/api/reviews/${reviewId}`, reviewPayload, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${context.currentUser.token}`
+        }
+      });
+
+      // Update the review in the list and maintain sorting
+      setReviews(prevReviews => {
+        const updatedReviews = prevReviews.map(review => 
+          review.id === reviewId ? { ...review, ...response.data } : review
+        );
+        
+        // Re-sort to maintain current user at top
+        return updatedReviews.sort((a, b) => {
+          const currentUserId = context?.currentUser?.id;
+          
+          if (currentUserId) {
+            const aIsCurrentUser = a.userId === currentUserId || a.user?.id === currentUserId;
+            const bIsCurrentUser = b.userId === currentUserId || b.user?.id === currentUserId;
+            
+            if (aIsCurrentUser && !bIsCurrentUser) return -1;
+            if (!aIsCurrentUser && bIsCurrentUser) return 1;
+          }
+          
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+      });
+
+      setEditingReviewId(null);
+      setEditReviewData({ rating: 5, comment: '' });
+      toast.success('Review updated successfully!');
+
+      // Notify parent component about the update
+      if (movieUpdate) {
+        movieUpdate();
+      }
+    } catch (error) {
+      console.error('Error updating review:', error);
+      if (error.response) {
+        toast.error(error.response.data.message || 'Failed to update review. Please try again.');
+      } else {
+        toast.error('Failed to update review. Please try again.');
+      }
+    } finally {
+      setIsUpdatingReview(false);
+    }
+  };
+
+  const handleDeleteReview = async (reviewId) => {
+    if (!context?.currentUser) {
+      toast.error('Please login to delete review');
+      return;
+    }
+
+    if (!window.confirm('Are you sure you want to delete this review?')) {
+      return;
+    }
+
+    setIsDeletingReview(reviewId);
+    try {
+      await axios.delete(`http://localhost:8080/api/reviews/${reviewId}`, {
+        headers: {
+          'Authorization': `Bearer ${context.currentUser.token}`
+        }
+      });
+
+      // Remove the review from the list
+      setReviews(prevReviews => prevReviews.filter(review => review.id !== reviewId));
+      toast.success('Review deleted successfully!');
+
+      // Notify parent component about the deletion
+      if (movieUpdate) {
+        movieUpdate();
+      }
+    } catch (error) {
+      console.error('Error deleting review:', error);
+      if (error.response) {
+        toast.error(error.response.data.message || 'Failed to delete review. Please try again.');
+      } else {
+        toast.error('Failed to delete review. Please try again.');
+      }
+    } finally {
+      setIsDeletingReview(null);
+    }
+  };
+
+  const handleEditReviewChange = (e) => {
+    const { name, value } = e.target;
+    setEditReviewData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
    // Render stars
@@ -285,15 +463,18 @@ const Movie = ({movies, onReviewAdded, movieUpdate}) => {
                   {reviews.length === 0 ? <span>No Reviews</span> : (reviews.length === 1 ? <span>1 Review</span> : <span>{reviews.length} Reviews</span>)} • Average rating: {movie.averageRating}/5
                 </p>
               </div>
-              <button 
-                onClick={handleWriteReviewClick}
-                className="mt-4 md:mt-0 bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
-              >
-                {context?.currentUser 
-                  ? (showReviewForm ? 'Cancel Review' : 'Write a Review')
-                  : 'Login to Write Review'
-                }
-              </button>
+              {/* Only show Write Review button if user is not logged in OR hasn't written a review yet */}
+              {(!context?.currentUser || !currentUserReview) && (
+                <button 
+                  onClick={handleWriteReviewClick}
+                  className="mt-4 md:mt-0 bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
+                >
+                  {context?.currentUser 
+                    ? (showReviewForm ? 'Cancel Review' : 'Write a Review')
+                    : 'Login to Write Review'
+                  }
+                </button>
+              )}
             </div>
 
             {/* Review Form - Only show for authenticated users */}
@@ -425,39 +606,98 @@ const Movie = ({movies, onReviewAdded, movieUpdate}) => {
 
                       {/* Rating Display */}
                       <div className="flex flex-col items-end">
-                        <div className="flex items-center space-x-1 mb-1">
-                          {renderStars(review.rating)}
-                        </div>
-                        <span className="text-sm font-semibold text-gray-600">
-                          {review.rating}/5
-                        </span>
+                        {editingReviewId === review.id ? (
+                          <div className="flex items-center space-x-1 mb-1">
+                            <select
+                              name="rating"
+                              value={editReviewData.rating}
+                              onChange={handleEditReviewChange}
+                              className="text-sm border border-gray-300 rounded px-2 py-1"
+                            >
+                              {[1, 2, 3, 4, 5].map(num => (
+                                <option key={num} value={num}>{num}</option>
+                              ))}
+                            </select>
+                            <span className="text-sm text-gray-500">stars</span>
+                          </div>
+                        ) : (
+                          <>
+                            <div className="flex items-center space-x-1 mb-1">
+                              {renderStars(review.rating)}
+                            </div>
+                            <span className="text-sm font-semibold text-gray-600">
+                              {review.rating}/5
+                            </span>
+                          </>
+                        )}
                       </div>
                     </div>
 
                     {/* Review Content */}
                     <div className="mb-4">
-                      <p className="text-gray-700 leading-relaxed text-base">
-                        {review.comment}
-                      </p>
+                      {editingReviewId === review.id ? (
+                        <textarea
+                          name="comment"
+                          value={editReviewData.comment}
+                          onChange={handleEditReviewChange}
+                          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 resize-vertical min-h-[100px]"
+                          placeholder="Edit your review..."
+                          rows={4}
+                        />
+                      ) : (
+                        <p className="text-gray-700 leading-relaxed text-base">
+                          {review.comment}
+                        </p>
+                      )}
                     </div>
 
                     {/* Review Footer */}
-                    <div className="flex items-center justify-end pt-4 border-t border-gray-100">
-                      {/* <div className="flex items-center space-x-4 text-sm text-gray-500">
-                        <button className="flex items-center space-x-1 hover:text-blue-500 transition-colors">
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V18m-7-8a2 2 0 01-2-2V6a2 2 0 012-2h2.5L10 7m4 3v10m-4-3h6m-6-3h6" />
-                          </svg>
-                          <span>Helpful ({Math.floor(Math.random() * 20) + 1})</span>
-                        </button>
-                        
-                        <button className="flex items-center space-x-1 hover:text-red-500 transition-colors">
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 13l3 3 7-7" />
-                          </svg>
-                          <span>Report</span>
-                        </button>
-                      </div> */}
+                    <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                      {/* Edit/Delete buttons for user's own reviews */}
+                      <div className="flex items-center space-x-4">
+                        {context?.currentUser && (review.userId === context.currentUser.id || review.user?.id === context.currentUser.id) && (
+                          <>
+                            {editingReviewId === review.id ? (
+                              <>
+                                <button
+                                  onClick={() => handleUpdateReview(review.id)}
+                                  disabled={isUpdatingReview}
+                                  className="flex items-center space-x-1 text-green-600 hover:text-green-800 text-sm font-medium transition-colors disabled:opacity-50"
+                                >
+                                  <FaSave className="w-3 h-3" />
+                                  <span>Save</span>
+                                </button>
+                                <button
+                                  onClick={handleCancelEdit}
+                                  disabled={isUpdatingReview}
+                                  className="flex items-center space-x-1 text-gray-600 hover:text-gray-800 text-sm font-medium transition-colors"
+                                >
+                                  <FaTimes className="w-3 h-3" />
+                                  <span>Cancel</span>
+                                </button>
+                              </>
+                            ) : (
+                              <>
+                                <button
+                                  onClick={() => handleEditReview(review)}
+                                  className="flex items-center space-x-1 text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors"
+                                >
+                                  <FaEdit className="w-3 h-3" />
+                                  <span>Edit</span>
+                                </button>
+                                <button
+                                  onClick={() => handleDeleteReview(review.id)}
+                                  disabled={isDeletingReview === review.id}
+                                  className="flex items-center space-x-1 text-red-600 hover:text-red-800 text-sm font-medium transition-colors disabled:opacity-50"
+                                >
+                                  <FaTrash className="w-3 h-3" />
+                                  <span>Delete</span>
+                                </button>
+                              </>
+                            )}
+                          </>
+                        )}
+                      </div>
                       
                       <span className="text-sm text-gray-400">
                         {formatToMMDDYYYY(review.reviewDate)}
