@@ -1,0 +1,92 @@
+[
+  {
+    "title": "Love in Tahiti",
+    "description": "Set against the turquoise waters and golden sunsets of Tahiti, 'Love in Tahiti' follows Emma, a travel photographer escaping a broken engagement, and Kai, a local marine biologist devoted to protecting the coral reefs. When their worlds collide, they embark on a transformative journey of love, healing, and rediscovering the beauty of second chances.",
+    "releaseDate": "2022-07-15",
+    "director": "Sofia Ramirez",
+    "genre": "Romantic Drama",
+    "posterUrl": "https://yts.mx/assets/images/movies/love_in_tahiti_2023/medium-cover.jpg",
+    "duration": 118
+  },
+  {
+    "title": "Merry Christmas, Ted Cooper!",
+    "description": "A heartwarming holiday comedy about Ted Cooper, a grumpy toy store manager whose Christmas spirit is reignited when a mysterious customer and a group of local kids remind him what the season is truly about.",
+    "releaseDate": "2023-12-01",
+    "director": "David L. Harmon",
+    "genre": "Comedy / Family",
+    "posterUrl": "https://yts.mx/assets/images/movies/merry_christmas_ted_cooper_2025/medium-cover.jpg",
+    "duration": 102
+  },
+  {
+    "title": "Don't Log Off",
+    "description": "During a virtual birthday party, a group of friends realizes one of them has gone missing. As they dig deeper, their video call turns into a race against time to uncover the truth before the connection drops forever.",
+    "releaseDate": "2022-10-28",
+    "director": "Nina Park",
+    "genre": "Thriller / Mystery",
+    "posterUrl": "https://yts.mx/assets/images/movies/dont_log_off_2025/medium-cover.jpg",
+    "duration": 96
+  },
+  {
+    "title": "Porcelain",
+    "description": "A psychological drama about a celebrated sculptor whose latest masterpiece becomes an obsession that blurs the line between art and madness.",
+    "releaseDate": "2023-03-17",
+    "director": "Jonas Feldman",
+    "genre": "Psychological Drama",
+    "posterUrl": "https://yts.mx/assets/images/movies/porcelain_2024/medium-cover.jpg",
+    "duration": 112
+  },
+  {
+    "title": "Silver, Speik and Sumpters",
+    "description": "An eccentric team of inventors embarks on a steampunk adventure to recover a stolen energy core that could change the course of human history.",
+    "releaseDate": "2021-11-19",
+    "director": "Greta Nolan",
+    "genre": "Adventure / Fantasy",
+    "posterUrl": "https://yts.mx/assets/images/movies/silver_speik_and_sumpters_2024/medium-cover.jpg",
+    "duration": 130
+  },
+  {
+    "title": "Psycho Ex",
+    "description": "A dark romantic thriller about a woman whose seemingly perfect relationship turns deadly when her ex-boyfriend begins stalking her with disturbing precision.",
+    "releaseDate": "2024-02-09",
+    "director": "Marcus Lee",
+    "genre": "Thriller / Romance",
+    "posterUrl": "https://yts.mx/assets/images/movies/psycho_ex_2024/medium-cover.jpg",
+    "duration": 108
+  },
+  {
+    "title": "Eleanor the Great",
+    "description": "At 75, Eleanor decides to fulfill her lifelong dream of performing stand-up comedy. With the help of her granddaughter, she rediscovers joy, resilience, and the courage to take the stage.",
+    "releaseDate": "2023-06-09",
+    "director": "Isabelle Hart",
+    "genre": "Drama / Comedy",
+    "posterUrl": "https://yts.mx/assets/images/movies/eleanor_the_great_2025/medium-cover.jpg",
+    "duration": 105
+  },
+  {
+    "title": "Babo: The Haftbefehl Story",
+    "description": "A gritty biographical drama tracing the rise of German rapper Haftbefehl from the streets of Offenbach to becoming a cultural icon in European hip-hop.",
+    "releaseDate": "2023-04-21",
+    "director": "Lukas Meier",
+    "genre": "Biography / Music",
+    "posterUrl": "https://yts.mx/assets/images/movies/babo_the_haftbefehl_story_2025/medium-cover.jpg",
+    "duration": 121
+  },
+  {
+    "title": "Meteor: Final Impact",
+    "description": "A massive meteor is headed toward Earth, and a team of scientists must work against time and bureaucracy to avert global catastrophe.",
+    "releaseDate": "2024-07-04",
+    "director": "Tom Richards",
+    "genre": "Action / Sci-Fi",
+    "posterUrl": "https://yts.mx/assets/images/movies/meteor_final_impact_2025/medium-cover.jpg",
+    "duration": 128
+  },
+  {
+    "title": "The Cleaners",
+    "description": "A group of content moderators for a social media giant begins to question the ethical and emotional toll of their work as they uncover disturbing truths hidden within the platform.",
+    "releaseDate": "2022-05-06",
+    "director": "Amira Chowdhury",
+    "genre": "Drama / Tech Thriller",
+    "posterUrl": "https://yts.mx/assets/images/movies/the_cleaners_2025/medium-cover.jpg",
+    "duration": 115
+  }
+]
