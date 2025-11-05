@@ -3,7 +3,7 @@ pipeline {
     
     environment {
         S3_BUCKET = 'trng2309-8'
-        AWS_REGION = 'us-east-2'
+        AWS_REGION = 'us-east-1'
     }
     
     stages {
