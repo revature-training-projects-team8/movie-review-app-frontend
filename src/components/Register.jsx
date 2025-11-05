@@ -3,7 +3,7 @@ import { useState, useContext } from 'react';
 import axios from 'axios';
 import { UserContext } from '../context.jsx';
 
-function Register() {
+function Register({ BASE_URL }) {
   const { updatedContext } = useContext(UserContext);
   const [formData, setFormData] = useState({
     username: '',
@@ -30,7 +30,7 @@ function Register() {
     setSuccess('');
 
     try {
-      const response = await axios.post('http://localhost:8080/auth/register', {
+      const response = await axios.post(`${BASE_URL}/auth/register`, {
         username: formData.username,
         email: formData.email,
         password: formData.password

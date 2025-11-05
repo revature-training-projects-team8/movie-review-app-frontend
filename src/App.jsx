@@ -31,11 +31,13 @@ function App() {
     window.sessionStorage.setItem("CONTEXT_APP", JSON.stringify(updated));
   };
 
+  const BASE_URL = 'http://ec2-54-234-94-174.compute-1.amazonaws.com:8088';
+
   // Fetch movies data
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const moviesResponseAPI = await axios.request('http://localhost:8080/api/movies');
+        const moviesResponseAPI = await axios.request(`${BASE_URL}/api/movies`);
     
         setMovies(moviesResponseAPI.data);
         setLoading(false);
@@ -52,7 +54,7 @@ function App() {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const reviewsResponseAPI = await axios.get('http://localhost:8080/api/reviews/all');
+        const reviewsResponseAPI = await axios.get(`${BASE_URL}/api/reviews/all`);
         setReviews(reviewsResponseAPI.data);
         setLoading(false);
       } catch (error) {
@@ -68,7 +70,7 @@ function App() {
   const refreshMovies = async () => {
     try {
       setLoading(true);
-      const moviesResponseAPI = await axios.request('http://localhost:8080/api/movies');
+      const moviesResponseAPI = await axios.request(`${BASE_URL}/api/movies`);
       setMovies(moviesResponseAPI.data);
       setLoading(false);
     } catch (error) {
@@ -81,7 +83,7 @@ function App() {
   const refreshReviews = async () => {
     try {
       setLoading(true);
-      const reviewsResponseAPI = await axios.get('http://localhost:8080/api/reviews/all');
+      const reviewsResponseAPI = await axios.get(`${BASE_URL}/api/reviews/all`);
       setReviews(reviewsResponseAPI.data);
       setLoading(false);
     } catch (error) {
@@ -104,13 +106,13 @@ function App() {
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Home movies={movies} reviews={reviews} loading={loading} />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login BASE_URL={BASE_URL} />} />
+            <Route path="/register" element={<Register BASE_URL={BASE_URL} />} />
             <Route path="/dashboard" element={<Dashboard movies={movies} reviews={reviews} loading={loading} />} />
-            <Route path="/manage-movies" element={<ManageMovies movies={movies} onMovieDeleted={handleMovieDeleted} loading={loading} />} />
-            <Route path="/movie/:id" element={<Movie movies={movies} loading={loading} onReviewAdded={refreshReviews} movieUpdate={refreshMovies}/>} />
-            <Route path="/add-movie" element={<AddMovie onMovieAdded={refreshMovies} />} />
-            <Route path="/edit-movie/:id" element={<EditMovie onMovieUpdated={refreshMovies} />} />
+            <Route path="/manage-movies" element={<ManageMovies movies={movies} onMovieDeleted={handleMovieDeleted} loading={loading} BASE_URL={BASE_URL} />} />
+            <Route path="/movie/:id" element={<Movie movies={movies} loading={loading} onReviewAdded={refreshReviews} movieUpdate={refreshMovies} BASE_URL={BASE_URL} />} />
+            <Route path="/add-movie" element={<AddMovie onMovieAdded={refreshMovies} BASE_URL={BASE_URL} />} />
+            <Route path="/edit-movie/:id" element={<EditMovie onMovieUpdated={refreshMovies} BASE_URL={BASE_URL} />} />
           </Routes>
         </main>
         <Footer />

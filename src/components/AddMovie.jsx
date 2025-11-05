@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const AddMovie = ({ onMovieAdded }) => {
+const AddMovie = ({ onMovieAdded, BASE_URL }) => {
   const [formData, setFormData] = useState({
     title: '',
     director: '',
@@ -40,7 +40,7 @@ const AddMovie = ({ onMovieAdded }) => {
       };
 
       // Make API call to add movie
-      const response = await axios.post('http://localhost:8080/api/movies', movieData, {
+      const response = await axios.post(`${BASE_URL}/api/movies`, movieData, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'

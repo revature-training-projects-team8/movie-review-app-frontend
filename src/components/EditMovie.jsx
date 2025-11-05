@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const EditMovie = ({ onMovieUpdated }) => {
+const EditMovie = ({ onMovieUpdated, BASE_URL }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   
@@ -24,7 +24,7 @@ const EditMovie = ({ onMovieUpdated }) => {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/movies/${id}`);
+        const response = await axios.get(`${BASE_URL}/api/movies/${id}`);
         const movie = response.data;
         
         setFormData({
@@ -81,7 +81,7 @@ const token = sessionStorage.getItem('token');
       };
 
       // Make API call to update movie
-      const response = await axios.put(`http://localhost:8080/api/movies/${id}`, movieData, {
+      const response = await axios.put(`${BASE_URL}/api/movies/${id}`, movieData, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
