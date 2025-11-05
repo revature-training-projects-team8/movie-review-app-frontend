@@ -114,7 +114,7 @@ export default function Login({ BASE_URL }) {
                 </label>
                 <div className="text-sm">
                   <a href="#" className="font-semibold text-orange-500 hover:text-orange-400">
-                    Forgot password?
+                    {/* Forgot password? */}
                   </a>
                 </div>
               </div>
