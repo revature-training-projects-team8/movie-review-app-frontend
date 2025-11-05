@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { UserContext } from '../context.jsx';
 
-export default function Login() {
+export default function Login({ BASE_URL }) {
 
   const { context, updatedContext } = useContext(UserContext);
   const [formData, setFormData] = useState({
@@ -28,7 +28,7 @@ export default function Login() {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:8080/auth/login', {
+      const response = await axios.post(`${BASE_URL}/auth/login`, {
         username: formData.username,
         password: formData.password
       }, {
@@ -41,16 +41,12 @@ export default function Login() {
       updatedContext({ currentUser: response.data });
       window.sessionStorage.setItem('token', response.data.token);
       
-      // const token = response.data.token;
-      // localStorage.setItem('token', token); // Store token in local storage
 
       if (response.data.role === "ADMIN"){
         navigate('/dashboard');
       } else {
         navigate('/');
       }
-      // Redirect to dashboard or home page
-      // navigate('/success-login');
       
     } catch (error) {
       console.error('Login error:', error);
