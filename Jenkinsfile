@@ -3,7 +3,7 @@ pipeline {
     
     environment {
         S3_BUCKET = 'trng2309-8'
-        AWS_REGION = 'us-east-1'
+        AWS_REGION = 'us-east-2'
     }
     
     stages {
@@ -25,6 +25,7 @@ pipeline {
             steps {
                 dir('movie-review-app-frontend/dist') {
                     sh 'aws s3 sync . s3://${S3_BUCKET}/ --delete --region ${AWS_REGION}'
+                    // sh 'aws s3 cp index.html s3://${S3_BUCKET}/index.html --region ${AWS_REGION}'
                 }
             }
         }
