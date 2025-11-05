@@ -463,8 +463,8 @@ const Movie = ({movies, onReviewAdded, movieUpdate, BASE_URL}) => {
                   {reviews.length === 0 ? <span>No Reviews</span> : (reviews.length === 1 ? <span>1 Review</span> : <span>{reviews.length} Reviews</span>)} • Average rating: {movie.averageRating}/5
                 </p>
               </div>
-              {/* Only show Write Review button if user is not logged in OR hasn't written a review yet */}
-              {(!context?.currentUser || !currentUserReview) && (
+              {/* Only show Write Review button if user is not logged in OR (hasn't written a review yet AND is not an admin) */}
+              {(!context?.currentUser || (!currentUserReview && context?.currentUser?.role !== 'ADMIN')) && (
                 <button 
                   onClick={handleWriteReviewClick}
                   className="mt-4 md:mt-0 bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
@@ -477,8 +477,8 @@ const Movie = ({movies, onReviewAdded, movieUpdate, BASE_URL}) => {
               )}
             </div>
 
-            {/* Review Form - Only show for authenticated users */}
-            {showReviewForm && context?.currentUser && (
+            {/* Review Form - Only show for authenticated non-admin users */}
+            {showReviewForm && context?.currentUser && context?.currentUser?.role !== 'ADMIN' && (
               <div className="bg-white rounded-2xl shadow-lg p-6 mb-8 border-2 border-orange-200">
                 <h3 className="text-xl font-bold text-gray-800 mb-4">Write Your Review</h3>
                 <form onSubmit={handleReviewSubmit} className="space-y-4">
@@ -571,12 +571,15 @@ const Movie = ({movies, onReviewAdded, movieUpdate, BASE_URL}) => {
                   </div>
                   <h3 className="text-xl font-semibold text-gray-600 mb-2">No reviews yet</h3>
                   <p className="text-gray-500 mb-6">Be the first to share your thoughts about this movie!</p>
-                  <button 
-                    onClick={handleWriteReviewClick}
-                    className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
-                  >
-                    {context?.currentUser ? 'Write First Review' : 'Login to Write Review'}
-                  </button>
+                  {/* Only show Write First Review button if user is not an admin */}
+                  {(!context?.currentUser || context?.currentUser?.role !== 'ADMIN') && (
+                    <button 
+                      onClick={handleWriteReviewClick}
+                      className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
+                    >
+                      {context?.currentUser ? 'Write First Review' : 'Login to Write Review'}
+                    </button>
+                  )}
                 </div>
               ) : (
                 reviews.map((review, index) => (
