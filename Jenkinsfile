@@ -3,7 +3,7 @@ pipeline {
     
     environment {
         S3_BUCKET = 'trng2309-8'
-        AWS_REGION = 'us-east-2'
+        AWS_REGION = 'us-east-1'
     }
     
     stages {
@@ -23,8 +23,7 @@ pipeline {
         
         stage('Deploy Frontend to S3') {
             steps {
-                    sh 'aws s3 sync dist/ s3://${S3_BUCKET}/ --delete --region ${AWS_REGION}'
-                    sh 'aws s3 cp index.html s3://${S3_BUCKET}/index.html --region ${AWS_REGION}'             
+                    sh 'aws s3 sync dist/ s3://${S3_BUCKET}/ --delete --region ${AWS_REGION}'           
                 }
         }
     }
