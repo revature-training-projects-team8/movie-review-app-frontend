@@ -41,16 +41,12 @@ export default function Login() {
       updatedContext({ currentUser: response.data });
       window.sessionStorage.setItem('token', response.data.token);
       
-      // const token = response.data.token;
-      // localStorage.setItem('token', token); // Store token in local storage
 
       if (response.data.role === "ADMIN"){
         navigate('/dashboard');
       } else {
         navigate('/');
       }
-      // Redirect to dashboard or home page
-      // navigate('/success-login');
       
     } catch (error) {
       console.error('Login error:', error);
