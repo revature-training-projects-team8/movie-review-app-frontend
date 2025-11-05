@@ -16,10 +16,8 @@ pipeline {
         
         stage('Build React Frontend') {
             steps {
-                dir('movie-review-app-frontend') {
                     sh 'npm install'
                     sh 'npm run build'
-                }
             }
         }
         
