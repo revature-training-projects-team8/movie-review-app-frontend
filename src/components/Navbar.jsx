@@ -60,7 +60,7 @@ export default function Navbar() {
             
             {context?.currentUser ? (
               <Menu as="div" className="relative">
-                <MenuButton className="flex items-center space-x-2 text-orange-400 hover:text-orange-300 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                <MenuButton className="flex items-center space-x-2 text-orange-400 hover:text-orange-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">
                   <UserIcon className="h-5 w-5" />
                   <span>{context.currentUser.username}</span>
                   <ChevronDownIcon className="h-4 w-4" />
