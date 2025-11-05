@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 
-const Movie = ({movies, onReviewAdded, movieUpdate}) => {
+const Movie = ({movies, onReviewAdded, movieUpdate, BASE_URL}) => {
   const { id } = useParams(); 
   const { context } = useContext(UserContext);
 
@@ -53,7 +53,7 @@ const Movie = ({movies, onReviewAdded, movieUpdate}) => {
       
       try {
         setReviewsLoading(true);
-        const response = await axios.get(`http://localhost:8080/api/reviews/movie/${id}`);
+        const response = await axios.get(`${BASE_URL}/api/reviews/movie/${id}`);
         // Backend should return reviews with populated user data (username via userId)
         // Sort reviews: current user's review first, then by creation date (newest first)
         const sortedReviews = response.data.sort((a, b) => {
@@ -123,7 +123,7 @@ const Movie = ({movies, onReviewAdded, movieUpdate}) => {
         comment: reviewData.comment.trim()
       };
 
-      const response = await axios.post(`http://localhost:8080/api/reviews/movie/${id}`, reviewPayload, {
+      const response = await axios.post(`${BASE_URL}/api/reviews/movie/${id}`, reviewPayload, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${context.currentUser.token}`
@@ -216,7 +216,7 @@ const Movie = ({movies, onReviewAdded, movieUpdate}) => {
         comment: editReviewData.comment.trim()
       };
 
-      const response = await axios.put(`http://localhost:8080/api/reviews/${reviewId}`, reviewPayload, {
+      const response = await axios.put(`${BASE_URL}/api/reviews/${reviewId}`, reviewPayload, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${context.currentUser.token}`
@@ -277,7 +277,7 @@ const Movie = ({movies, onReviewAdded, movieUpdate}) => {
 
     setIsDeletingReview(reviewId);
     try {
-      await axios.delete(`http://localhost:8080/api/reviews/${reviewId}`, {
+      await axios.delete(`${BASE_URL}/api/reviews/${reviewId}`, {
         headers: {
           'Authorization': `Bearer ${context.currentUser.token}`
         }

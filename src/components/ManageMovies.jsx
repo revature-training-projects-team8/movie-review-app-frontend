@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { PencilSquareIcon, TrashIcon, EyeIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
 
-const ManageMovies = ({ movies, onMovieDeleted, loading }) => {
+const ManageMovies = ({ movies, onMovieDeleted, loading, BASE_URL }) => {
   const navigate = useNavigate();
   const [localMovies, setLocalMovies] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -31,7 +31,7 @@ const ManageMovies = ({ movies, onMovieDeleted, loading }) => {
   // Handle delete movie
   const handleDelete = async (movieId) => {
     try {
-      await axios.delete(`http://localhost:8080/api/movies/${movieId}`, 
+      await axios.delete(`${BASE_URL}/api/movies/${movieId}`,
         {
   headers: {
     Authorization: `Bearer ${token}`
