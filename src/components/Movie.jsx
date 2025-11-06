@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 
-const Movie = ({movies, onReviewAdded, movieUpdate, BASE_URL}) => {
+const Movie = ({movies, onReviewAdded, movieUpdate, BASE_URL, refreshReviews}) => {
   const { id } = useParams(); 
   const { context } = useContext(UserContext);
 
@@ -252,6 +252,7 @@ const Movie = ({movies, onReviewAdded, movieUpdate, BASE_URL}) => {
       // Notify parent component about the update
       if (movieUpdate) {
         movieUpdate();
+        refreshReviews();
       }
     } catch (error) {
       console.error('Error updating review:', error);
@@ -290,6 +291,7 @@ const Movie = ({movies, onReviewAdded, movieUpdate, BASE_URL}) => {
       // Notify parent component about the deletion
       if (movieUpdate) {
         movieUpdate();
+        refreshReviews();
       }
     } catch (error) {
       console.error('Error deleting review:', error);

@@ -110,7 +110,7 @@ function App() {
             <Route path="/register" element={<Register BASE_URL={BASE_URL} />} />
             <Route path="/dashboard" element={<Dashboard movies={movies} reviews={reviews} loading={loading} />} />
             <Route path="/manage-movies" element={<ManageMovies movies={movies} onMovieDeleted={handleMovieDeleted} loading={loading} BASE_URL={BASE_URL} />} />
-            <Route path="/movie/:id" element={<Movie movies={movies} loading={loading} onReviewAdded={refreshReviews} movieUpdate={refreshMovies} BASE_URL={BASE_URL} />} />
+            <Route path="/movie/:id" element={<Movie movies={movies} loading={loading} onReviewAdded={refreshReviews} movieUpdate={refreshMovies} BASE_URL={BASE_URL} refreshReviews={refreshReviews}  />} />
             <Route path="/add-movie" element={<AddMovie onMovieAdded={refreshMovies} BASE_URL={BASE_URL} />} />
             <Route path="/edit-movie/:id" element={<EditMovie onMovieUpdated={refreshMovies} BASE_URL={BASE_URL} />} />
           </Routes>
