@@ -46,8 +46,6 @@ const AddMovie = ({ onMovieAdded, BASE_URL }) => {
           'Content-Type': 'application/json'
         }
       });
-
-      console.log('Movie added successfully:', response.data);
       
       // Reset form on success
       setFormData({
