@@ -8,7 +8,8 @@ function Register({ BASE_URL }) {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
-    password: ''
+    password: '',
+    confirmPassword: ''
   });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
@@ -29,6 +30,13 @@ function Register({ BASE_URL }) {
     setError('');
     setSuccess('');
 
+    // Check if passwords match
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match. Please try again.');
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const response = await axios.post(`${BASE_URL}/auth/register`, {
         username: formData.username,
@@ -46,7 +54,8 @@ function Register({ BASE_URL }) {
       setFormData({
         username: '',
         email: '',
-        password: ''
+        password: '',
+        confirmPassword: ''
       });
 
       // Redirect to login page after 2 seconds
@@ -156,6 +165,27 @@ function Register({ BASE_URL }) {
                   autoComplete="new-password"
                   className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-orange-600 sm:text-sm/6"
                   placeholder="Enter your password"
+                />
+              </div>
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between">
+                <label htmlFor="confirmPassword" className="block text-sm/6 font-medium text-gray-900">
+                  Confirm Password
+                </label>
+              </div>
+              <div className="mt-2">
+                <input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  required
+                  autoComplete="new-password"
+                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-orange-600 sm:text-sm/6"
+                  placeholder="Confirm your password"
                 />
               </div>
             </div>
