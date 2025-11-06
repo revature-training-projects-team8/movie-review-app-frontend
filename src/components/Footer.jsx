@@ -21,12 +21,6 @@ const Footer = () => {
           >
             Terms of Service
           </a>
-          {/* <Link
-            to="/dashboard"
-            className="hover:text-white transition-colors duration-200"
-          >
-            Admin
-          </Link> */}
         </div>
       </div>
     </footer>
